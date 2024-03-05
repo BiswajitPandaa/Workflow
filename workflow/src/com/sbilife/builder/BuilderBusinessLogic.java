@@ -75,7 +75,7 @@ public class BuilderBusinessLogic {
 
 	// ============================= Required for Premium_I
 
-	public double get_PPT_Input() {
+	public double get_PPT_Input() {            //Wrong 
 		double PPT = 0;
 		if (swbBean.getPlan().equals("LPPT")) {
 			PPT = swbBean.getPolicyTerm();
@@ -88,6 +88,7 @@ public class BuilderBusinessLogic {
 		}
 		return PPT;
 	}
+	//==============================================
 
 	public double get_premMode_input() {
 		double mode = 0;
@@ -128,7 +129,7 @@ public class BuilderBusinessLogic {
 	}
 
 	// =======================================Required for premium allocation
-
+ 
 	public double premallocationchargeInputPG(boolean bancaDiss, double year) {
 		double allocCharge = 0;
 		double ot = 0;
@@ -136,7 +137,7 @@ public class BuilderBusinessLogic {
 			if (year == 1) {
 				if (swbBean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.09 - 0.1;
-				} else if (swbBean.isStafDisc() == false && bancaDiss == true) {
+ 				} else if (swbBean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = (0.09 - 0.1 * 1);
 				}
 				ot = Math.max(allocCharge, 0);
@@ -255,6 +256,7 @@ public class BuilderBusinessLogic {
 		return premalloccharge_J;
 	}
 
+	
 	// ============================ Tax on Allocation K
 	public void setTaxOnAllocation_K(double month, double year, boolean bancaDiss) {
 		if (prop.AllocationCharges == true) {
@@ -372,7 +374,7 @@ public class BuilderBusinessLogic {
 	}
 
 	// =========================================== Not printing
-	public double Mortality_rates_last_bday(double age) {
+	public double Mortality_rates_last_bday(double age) {// still not use
 
 		double[] mortalityRate = db.getIAIarray();
 		double val = 0;
@@ -391,7 +393,7 @@ public class BuilderBusinessLogic {
 
 	}
 
-	public double to_compare(double sum_premium, double AmtAvailForInvestment) {
+	public double to_compare(double sum_premium, double AmtAvailForInvestment) { //still not use
 		double fundvalatend = 0;
 		double ans = sum_premium * 1.05 - (AmtAvailForInvestment + fundvalatend);
 
@@ -402,7 +404,7 @@ public class BuilderBusinessLogic {
 		return maxval;
 	}
 
-	public double comparetwoval(double sum_premium, double AmtAvailForInvestment) {
+	public double comparetwoval(double sum_premium, double AmtAvailForInvestment) { //still not use
 		double fundvalatend = 0;
 		double ans = sum_premium * 1.05 - fundvalatend;
 
@@ -489,9 +491,7 @@ public class BuilderBusinessLogic {
 		if (month == 1) {
 			AE = 0;
 		} else {
-//			AE= getFundValueAtEnd_AE();
-//			AE = getFundValueAtEnd_AE(month, year, bankdiss, sumprem);
-			AE = Double.parseDouble(getFundValueAtEnd_AE_pass());
+		AE = Double.parseDouble(getFundValueAtEnd_AE_pass());
 		}
 
 		double inner1max1 = Math.max(0, SumAssured());
@@ -518,7 +518,6 @@ public class BuilderBusinessLogic {
 	}
 
 	// ====================================================== Required
-
 	public double AM3() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Date date1 = null, date2 = null;
@@ -557,7 +556,7 @@ public class BuilderBusinessLogic {
 	public String getTotalCharges_T() {
 		return TotalCharges_T;
 	}
-
+	
 	// ====================================================== TotalTax_U
 	public void setTotalTax_U(double year, double month, boolean bankdiss, double sumPrem) {
 
@@ -594,7 +593,7 @@ public class BuilderBusinessLogic {
 	public String getTotalTax_U() {
 		return TotalTax_U;
 	}
-
+	
 	// ====================================================== TotalTax_V
 	public void setTotalTax_V(double month, double year_F, boolean bankdiss) {
 		double colU = Double.parseDouble(getTotalTax_U());
@@ -625,6 +624,8 @@ public class BuilderBusinessLogic {
 	}
 
 	// ====================================================== AdditionToFund_W
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	
 	public void setAdditionToFund_W(double month, double year, boolean bankdiss, double sumprem) {
 		double output = 0;
 

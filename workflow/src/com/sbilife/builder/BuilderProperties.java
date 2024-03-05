@@ -24,7 +24,7 @@ public class BuilderProperties {
 	
 	String SMAF_at_the_discretion_of_Policyholder = "No",
 			database_BM4 = "higher(FV,SA)",
-			kfcDate = "31/07/2021";
+			kfcDate = "31/07/2021"; 
 	
 	final double Min_regular_PPT = 10;
 	final double Max_regular_PPT = 10;
