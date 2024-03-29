@@ -7,12 +7,8 @@ public class Builder {
 	StringBuilder retval = null;
 	StringBuilder retvalnew = null;
 
-	public String CalculatePrem(String isStaff, String age, String gender, String plan, String premFreqMode,
-			String premPayingTerm, String proposerAge, String policyTerm, String premiumAmount, String sAMF,
-			String noOfYrElapsed, String perInvEquityFund, String perInvEquityOptimiserFund, String perInvgrowthFund,
-			String perInvBalancedFund, String perInvBondFund, String perInvMoneyMarketFund, String perInvTop300Fund,
-			String kFC, String perInvBondOptimiserFund, String perInvMidcapFund, String perInvPureFund,
-			String perInvCorpBondFund, String proposalDate) {
+	public String CalculatePrem(String age,String gender,String plan,String premiumAmount,String policyTerm,String premFreqMode,
+			String stafDisc , String proposalDate) {
 		BuilderBean swbBean = new BuilderBean();
 		try {
 			swbBean.setAge(Integer.parseInt(age));
@@ -21,9 +17,9 @@ public class Builder {
 			swbBean.setBaseprem(Double.parseDouble(premiumAmount));
 			swbBean.setPolicyTerm(Integer.parseInt(policyTerm));
 			swbBean.setPremPayingMode(premFreqMode);
-			swbBean.setPf(1);
-			swbBean.setBaseprem(Double.parseDouble(premiumAmount));
-			swbBean.setStafDisc(Boolean.parseBoolean(isStaff));
+//			swbBean.setPf(1);
+			
+			swbBean.setStafDisc(Boolean.parseBoolean(stafDisc));
 			swbBean.setProposalDate(proposalDate);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -33,18 +29,25 @@ public class Builder {
 	}
 
 	public String BuilderPgOut(BuilderBean swbBean) {
-		BuilderBusinessLogic swbBuss = new BuilderBusinessLogic(swbBean);
+		BuilderLogic swbBuss = new BuilderLogic(swbBean);
 		retval = new StringBuilder();
 		retvalnew = new StringBuilder();
 		boolean bancaDiss = false;
 		  double sum_R=0;
-
+		  double mortality=0;
+		  double Aptax =0;
+		  double polAcharges=0;
+		  double fmc =0;
+		  double fundMangementCharges =0;
+		  double applicableTax=0;
+		  double premallocchg=0;
+		  retvalnew.append("<?xml version='1.0' encoding='utf-8' ?><Builder>");
 		for (int i = 1; i <= swbBean.getPolicyTerm() * 12; i++) {
 			swbBuss.setMonth_E(i);
 			double month_ph = Double.parseDouble(swbBuss.getMonth_E());
 			retval.append("<Month>" + month_ph + "</Month>");
 
-			swbBuss.setYear_F();
+			swbBuss.setYear_F();  
 			double year_ph = Double.parseDouble(swbBuss.getYear_F());
 			retval.append("<Year>" + year_ph + "</Year>");
 
@@ -61,7 +64,7 @@ public class Builder {
 
 			swbBuss.setPremAllocCharge_J(month_ph, year_ph, bancaDiss);
 			double premAllocCharge = Double.parseDouble(swbBuss.getPremAllocCharge_J());
-			retval.append("<prem_Alloc_Charge>" + premAllocCharge + "</premAllocCharge>");
+			retval.append("<premAllocCharge>" + premAllocCharge + "</premAllocCharge>");
 
 			swbBuss.setTaxOnAllocation_K(month_ph, year_ph, bancaDiss);
 			double taxOnAllocation = Double.parseDouble(swbBuss.getTaxOnAllocation_K());
@@ -120,7 +123,7 @@ public class Builder {
 			double FundValueAfterFMC_AB = Double.parseDouble(swbBuss.getFundValueAfterFMC_AB());
 			retval.append("<FundValueAfterFMC_AB>" + FundValueAfterFMC_AB + "</FundValueAfterFMC_AB>");
 
-			swbBuss.setGuranteeAddition_AC();
+			swbBuss.setGuranteeAddition_AC(month_ph);
 			double GuranteeAddition_AC = Double.parseDouble(swbBuss.getGuranteeAddition_AC());
 			retval.append("<GuranteeAddition_AC>" + GuranteeAddition_AC + "</GuranteeAddition_AC>");
 
@@ -128,8 +131,8 @@ public class Builder {
 			double TerminalAddition_AD = Double.parseDouble(swbBuss.getTerminalAddition_AD());
 			retval.append("<TerminalAddition_AD>" + TerminalAddition_AD + "</TerminalAddition_AD>");
 
-			swbBuss.setFundValueAtEnd_AE(month_ph, year_ph, bancaDiss, sum_premium);
-			double FundValueAtEnd_AE = Double.parseDouble(swbBuss.getFundValueAtEnd_AE());
+			swbBuss.setFundValueAtEnd_AE_pass(month_ph, year_ph, bancaDiss, sum_R);
+			double FundValueAtEnd_AE = Double.parseDouble(swbBuss.getFundValueAtEnd_AE_pass());
 			retval.append("<FundValueAtEnd_AE>" + FundValueAtEnd_AE + "</FundValueAtEnd_AE>");
 
 			swbBuss.setFundValueAtEnd_AE_pass(month_ph - 1, year_ph, bancaDiss, sum_premium);
@@ -150,16 +153,16 @@ public class Builder {
 			double DeathBenifit_AI = Double.parseDouble(swbBuss.getDeathBenifit_AI());
 			retval.append("<DeathBenifit_AI>" + DeathBenifit_AI + "</DeathBenifit_AI>");
 
-			swbBuss.setMortalityMorbality_AJ(month_ph, year_ph, bancaDiss, sum_premium);
-			double MortalityMorbality_AJ = Double.parseDouble(swbBuss.getMortalityMorbality_AJ());
+			swbBuss.setMortalityRate_AJ(year_ph, month_ph, bancaDiss, sum_R);
+			double MortalityMorbality_AJ = Double.parseDouble(swbBuss.getMortalityRate_AJ());
 			retval.append("<MortalityMorbality_AJ>" + MortalityMorbality_AJ + "</MortalityMorbality_AJ>");
 
 			swbBuss.setTotalCharges_AL(year_ph);
 			double TotalCharges_AL = Double.parseDouble(swbBuss.getTotalCharges_AL());
 			retval.append("<TotalCharges_AL>" + TotalCharges_AL + "</TotalCharges_AL>");
 
-			swbBuss.setTotalTax_AM(year_ph, month_ph, sum_premium);
-			double TotalTax_AM = Double.parseDouble(swbBuss.getTotalTax_AM());
+			swbBuss.setTotalTaxSurr_AM(year_ph, month_ph, sum_premium);
+			double TotalTax_AM = Double.parseDouble(swbBuss.getTotalTaxSurr_AM());
 			retval.append("<TotalTax_AM>" + TotalTax_AM + "</TotalTax_AM>");
 
 			swbBuss.setTotalTax_AN(month_ph, year_ph, bancaDiss, sum_premium);
@@ -178,10 +181,6 @@ public class Builder {
 			double FundManagementCharge_AQ = Double.parseDouble(swbBuss.getFundManagementCharge_AQ());
 			retval.append("<FundManagementCharge_AQ>" + FundManagementCharge_AQ + "</FundManagementCharge_AQ>");
 
-			swbBuss.setGuaranteeCharge_AR(month_ph, year_ph, bancaDiss, sum_premium);
-			double GuaranteeCharge_AR = Double.parseDouble(swbBuss.getGuaranteeCharge_AR());
-			retval.append("<GuaranteeCharge_AR>" + GuaranteeCharge_AR + "</GuaranteeCharge_AR>");
-
 			swbBuss.setTaxOnFMCAndGuaranteeCharge_AS(month_ph, year_ph, bancaDiss, sum_premium);
 			double TaxOnFMCAndGuaranteeCharge_AS = Double.parseDouble(swbBuss.getTaxOnFMCAndGuaranteeCharge_AS());
 			retval.append("<TaxOnFMCAndGuaranteeCharge_AS>" + TaxOnFMCAndGuaranteeCharge_AS
@@ -191,20 +190,20 @@ public class Builder {
 			double FundValueAfterFMC_AT = Double.parseDouble(swbBuss.getFundValueAfterFMC_AT());
 			retval.append("<FundValueAfterFMC_AT>" + FundValueAfterFMC_AT + "</FundValueAfterFMC_AT>");
 
-			swbBuss.setGuranteeAddition_AU();
-			double GuranteeAddition_AU = Double.parseDouble(swbBuss.getGuranteeAddition_AU());
+			
+			double GuranteeAddition_AU = swbBuss.getGurantedAddition_AR(month_ph);
 			retval.append("<GuranteeAddition_AU>" + GuranteeAddition_AU + "</GuranteeAddition_AU>");
 
-			swbBuss.setTerminalAddition_AV(month_ph, year_ph, bancaDiss, sum_premium);
-			double TerminalAddition_AV = Double.parseDouble(swbBuss.getTerminalAddition_AV());
+			
+			double TerminalAddition_AV =swbBuss.getTerminalAddition_AV();
 			retval.append("<TerminalAddition_AV>" + TerminalAddition_AV + "</TerminalAddition_AV>");
 
 			// =========================== AW SECTION
-			swbBuss.setFundValueAtEnd_AW(month_ph, year_ph, bancaDiss, sum_premium);
-			double FundValueAtEnd_AW1 = Double.parseDouble(swbBuss.getFundValueAtEnd_AW());
+			swbBuss.setFundValueAtEnd_AW_pass(month_ph, year_ph, bancaDiss, sum_R);
+			double FundValueAtEnd_AW1 = Double.parseDouble(swbBuss.getFundValueAtEnd_AW_pass());
 			retval.append("<FundValueAtEnd_AW>" + FundValueAtEnd_AW1 + "</FundValueAtEnd_AW>");
 
-			swbBuss.setFundValueAtEnd_AW_pass(month_ph - 1, year_ph, bancaDiss, sum_premium);
+		
 			// =========================== AW SECTION
 
 			swbBuss.setSurrenderCharges_AX(month_ph, year_ph, bancaDiss, sum_premium);
@@ -221,32 +220,64 @@ public class Builder {
 
 			swbBuss.setDeathBenifit_BA(sum_premium);
 			double DeathBenifit_BA = Double.parseDouble(swbBuss.getDeathBenifit_BA());
-			retval.append("<DeathBenifit_BA>" + DeathBenifit_BA + "</DeathBenifit_BA>");
+			retval.append("<DeathBenifit_BA>" + DeathBenifit_BA + "</DeathBenifit_BA>");	
 			
+			 
 			 int year = (int)year_ph;
 	            if (month_ph % 12 == 1) {
 	                double prem = premium;
-	        
-	                retvalnew.append("<premium" + year + ">" + prem + "</premium" + year + ">");
-	                
-	                double premallocchg = premAllocCharge;
-	                retvalnew.append("<premallocchg" + year + ">" + premallocchg + "</premallocchg" + year + ">");
-	                
-	                double prem_minus_alloccharge = prem - premallocchg;
-	                retvalnew.append("<prem_minus_alloccharge" + year + ">" + prem_minus_alloccharge + "</prem_minus_alloccharge" + year + ">");
+
+
+	                retvalnew.append("<AnnualPremium"+ year +">" + prem + "</AnnualPremium"+ year +">");
+//	                 premallocchg = premAllocCharge;
+//	                retvalnew.append("<premallocchg" + year + ">" + premallocchg + "</premallocchg" + year + ">");
+//	                
+//	                double prem_minus_alloccharge = prem - premallocchg;
+//	                retvalnew.append("<prem_minus_alloccharge" + year + ">" + prem_minus_alloccharge + "</prem_minus_alloccharge" + year + ">");
 	            }
+             sum_R += MortalityRate;
+	            Aptax+=TotalTax_V;
+              fmc+=FundManagementCharge_Y_;
+                polAcharges+=policyAdministrationCharge;
+                premallocchg+=premAllocCharge;
+	            applicableTax+=TotalTax_AN;
+	            fundMangementCharges+=FundManagementCharge_AQ;
+	          mortality+=MortalityMorbality_AJ;
+	          
 	            
-	            sum_R += MortalityRate;
 	            if((month_ph%12)==0)
-	            {
-	                
-//	                System.out.println("SUM="+sum_R);
-	                
+          {
+            
+	            	 retvalnew.append("<Year>" + year+ "</Year>");
 	                retvalnew.append("<MortChrg4Pr"+ year +">" + Math.round(sum_R) + "</MortChrg4Pr"+ year +">");
+	                retvalnew.append("<OtherCharges"+year+">" +Math.round(premallocchg+polAcharges+fmc) +"</OtherCharges"+year+">");
+	                retvalnew.append("<ApplicableTax" +year+">" + Math.round(Aptax)+"</ApplicableTax"+year+">");
+	                retvalnew.append("<fundAtEnd" +year+">" + Math.round(FundValueAtEnd_AE)+"</fundAtEnd"+year+">");
+	                retvalnew.append("<SurrenderValue"+year+">" + Math.round(SurrenderValue_AH)+"</SurrenderValue"+year+">");
+	                retvalnew.append("<DeathBenifits"+year+">" + Math.round(DeathBenifit_AI)+"</DeathBenifits"+year+">");
+	            	 retvalnew.append("<MortChrg8Pr"+ year +">" + Math.round(mortality) + "</MortChrg8Pr"+ year +">");
+	            	 retvalnew.append("<OtherCharges8pr"+year+">" +Math.round(premallocchg+polAcharges+fundMangementCharges) +"</OtherCharges8pr"+year+">");
+	            retvalnew.append("<ApplicableTax8pr" +year+">" + Math.round(applicableTax)+"</ApplicableTax8pr"+year+">");
+	            retvalnew.append("<fundAtEnd8pr" +year+">" + Math.round(FundValueAtEnd_AW1)+"</fundAtEnd8pr"+year+">");
+	            retvalnew.append("<SurrenderValue8pr"+year+">" + Math.round(SurrenderValue_AZ)+"</SurrenderValue8pr"+year+">");
+            retvalnew.append("<DeathBenifits"+year+">" + Math.round(DeathBenifit_BA)+"</DeathBenifits"+year+">");
+	                
+	              
 	                sum_R = 0;
-		}
+	                Aptax=0;
+	                fmc=0;
+              mortality=0;
+             polAcharges=0;
+            applicableTax =0;
+            fundMangementCharges=0;
+            premallocchg=0;
+            
+	}
+		
+		
 		
 	}
+		 retvalnew.append("</Builder>");
 		return retvalnew.toString();
 }
 }

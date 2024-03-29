@@ -1,7 +1,7 @@
 
 package com.sbilife.BuilderNew;
 
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -15,13 +15,29 @@ public class BuilderNewLogic {
  BuilderNewDb db = new BuilderNewDb();
  BuilderNewProperties prop = new BuilderNewProperties();
  
+ public BuilderNewLogic(BuilderNewBean bean) {
+		this.bean = bean;
+ }
  
- public BuilderNewLogic( BuilderNewBean bean) {
-	 this.bean= bean;
-
+ public int age(double year)
+ {
+	 return (bean.age +(int)year) -1;
+ }
+ 
+ 
+ 
+ 
+ public double month(int row)
+ {
+	 return row;
+	
+ }
+  
+ public double year(int row) {
+	 
+	 double yearr = month(row)/12;
+	 return comm.roundUP(yearr,0);
 }
- 
- 
  public double premiumPayingTerm()
  {   double ppt = 0;
  
@@ -33,13 +49,13 @@ public class BuilderNewLogic {
 	 else if (bean.getPlanType().equalsIgnoreCase("single"))
 		 ppt= 1;
 	 else
-	 {  if(bean.getPremiumPayingTerm()==7 || bean.getPremiumPayingTerm()==10|| bean.getPremiumPayingTerm() == 12)
-		   ppt = bean.getPremiumPayingTerm();
+	 {  if(bean.getPolicyTerm()==7 || bean.getPolicyTerm()==10|| bean.getPolicyTerm() == 12)
+		   ppt = bean.getPolicyTerm();
 	 else
 		 System.out.println("wrong input in Premium Paying Term it will be either 7,10 or 12");
 	    
 	 }
-	 return premiumPayingTerm();
+	 return ppt;
  }
    public double getpremiumMode()
    {    double mod= 0;
@@ -50,18 +66,18 @@ public class BuilderNewLogic {
     	 
    }
    // premium
-   public double getPremium(double month, double year) {
+   public double getAnnualPremium(double month, double year) {
 		double val1 = month - 1;
 		double val2 = 12 / getpremiumMode();
 		double mod = val1 % val2;
 		double premium = 0;
 
-		if (year > 0 && year <= premiumPayingTerm() && mod == 0) {
+		if (year > 0 && year <= bean.policyTerm && mod == 0) {
 			premium = bean.getBasePremium();
 		} else {
 			premium=0;
 		}
-		return premium;
+		return comm.roundUP(premium, 2);
 	}
 
    //allocation charge
@@ -69,109 +85,109 @@ public class BuilderNewLogic {
    public double premallocationchargeInputPG(boolean bancaDiss, double year) {
 		double allocCharge = 0;
 		double ot = 0;
-		if (bean.getPlanType().equals("Regular")) {
+		if (bean.getPlanType().equalsIgnoreCase("Regular")) {
 			if (year == 1) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.09 - 0.1;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = (0.09 - 0.1 * 1);
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 2) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.065 - 0.02;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.065 - 0.02 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 3) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.065 - 0.02;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.065 - 0.02 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 4) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.06 - 0.02;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.06 - 0.02 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 5) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.06 - 0.02;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.06 - 0.02 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 6) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.035 - 0.015;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.035 - 0.015 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 7) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.035 - 0.015;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.035 - 0.015 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 8 || year == 9 || year == 10) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.03 - 0.01;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.03 - 0.01 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
 			}
 
-		} else if (bean.getPlanType().equals("Single")) {
+		} else if (bean.getPlanType().equalsIgnoreCase("Single")) {
 			if (year == 1) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.03 - 0.02;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.03 - 0.02 * 1;
 				}
 			} else {
 				return 0;
 			}
 
-		} else if (bean.getPlanType().equals("LPPT")) {
+		} else if (bean.getPlanType().equalsIgnoreCase("LPPT")) {
 			if (year == 1) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.09 - 0.1;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = (0.09 - 0.1 * 1);
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 2 || year == 3) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.065 - 0.02;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.065 - 0.02 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 4 || year == 5) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.06 - 0.02;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.06 - 0.02 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 6 || year == 7) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.035 - 0.015;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.035 - 0.015 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
 			} else if (year == 8 || year == 9 || year == 10) {
-				if (bean.isStaffDis() == true && bancaDiss == false) {
+				if (bean.isStafDisc() == true && bancaDiss == false) {
 					allocCharge = 0.03 - 0.01;
-				} else if (bean.isStaffDis() == false && bancaDiss == true) {
+				} else if (bean.isStafDisc() == false && bancaDiss == true) {
 					allocCharge = 0.03 - 0.01 * 0;
 				}
 				ot = Math.max(allocCharge, 0);
@@ -181,7 +197,7 @@ public class BuilderNewLogic {
 	}
    //  allocation result
    public double getPremiumAllocCharge(double month, double year, boolean bancaDiss) {
-		double  allo= getPremium(month, year) * premallocationchargeInputPG(bancaDiss, year);
+		double  allo= getAnnualPremium(month, year) * premallocationchargeInputPG(bancaDiss, year);
 		String res=  comm.getRoundOffLevel2New(String.valueOf(allo));
 		return Double.parseDouble(res);
 		
@@ -193,7 +209,7 @@ public class BuilderNewLogic {
 			double Taxall =  prop.ServiceTax * getPremiumAllocCharge(month, year, bancaDiss);
 			String res = comm.getRound(String.valueOf(Taxall));
 			return Double.parseDouble(res);
-		} else 
+		} else   
 			return 0;
 		
 	}
@@ -203,11 +219,11 @@ public class BuilderNewLogic {
 		if (year == 0) {
 			return 0;
 		} else {
-			double invest = getPremium(month, year)
+			double invest = getAnnualPremium(month, year)
 					- getPremiumAllocCharge(month, year, bancaDiss) - (getTaxOnAllocation_K(month, year, bancaDiss));
 			
-			String res = comm.getRoundUp(String.valueOf(invest));
-			return  Double.parseDouble(res);
+			double res = comm.roundUP(invest, 2);
+			return res;
 		}
    }
    //====================================dn't use
@@ -285,19 +301,19 @@ public class BuilderNewLogic {
 		double output = 0;
 		double SAMF = 0;
 		if (prop.SMAFatthediscretionofPolicyholder.equals("No")) {
-			if (bean.getPlanType().equals("Regular")) {
-				if (prop.samfMin_regular_PPT == prop.samfMax_LPPT_PPT) {
+			if (bean.getPlanType().equalsIgnoreCase("Regular")) {
+				if (prop.samfMin_regular_PPT == prop.samfMax_regular_PPT) {
 					output = prop.samfMax_regular_PPT * AnnualPrem_InputPg();
 				} else {
 					output = SAMF * AnnualPrem_InputPg();
 				}
-			} else if (bean.getPlanType().equals("Single")) {
+			} else if (bean.getPlanType().equalsIgnoreCase("Single")) {
 				if (prop.samfMin_single_PPT == prop.samfMax_single_PPT) {
 					output = prop.samfMax_single_PPT * AnnualPrem_InputPg();
 				} else {
 					output = SAMF * AnnualPrem_InputPg();
 				}
-			} else if (bean.getPlanType().equals("LPPT")) {
+			} else if (bean.getPlanType().equalsIgnoreCase("LPPT")) {
 				if (prop.samfMin_LPPT_PPT == prop.samfMax_LPPT_PPT) {
 					output = prop.samfMax_LPPT_PPT * AnnualPrem_InputPg();
 				} else {
@@ -341,25 +357,26 @@ public class BuilderNewLogic {
 		double arr[] = db.getMortalityChargesTable();
 		double output = 0;
 		for (int i = 0; i < arr.length; i++) {
-			if (bean.getAge()-1 == i) {
+			if (29 == i) {
 				output = arr[i];
 			}
 		}
 		return output;
 	}
-    public double getMortalityAndMorbidityCharges4(double year, double month, boolean bancdiss, double sumprem){
+  
+    public double getMortalityAndMorbidityCharges4(double year, double month, boolean bancdiss, double sumPrem){
     	double mortalityCharge = getMortalityChargesTable();
 		double AW = 0;
 		if (month == 1) {
 			AW = 0;
 		} else {
-		AW = getFundValueAtEnd4(year, month, bancdiss);//getFundValueAtEnd_AW_pass()   needed
+		AW = getFundValueAtEnd4(year, month, bancdiss,sumPrem);
 		}
 
 		double inner1max1 = Math.max(0, SumAssured());
-		double max1 = Math.max(inner1max1, sumprem);
+		double max1 = Math.max(inner1max1, sumPrem);
 
-		double inner1max2 = Math.max(SumAssured(), (sumprem * 1.05 - AW));
+		double inner1max2 = Math.max(SumAssured(), (sumPrem * 1.05 - AW));
 
 		double val1 = mortalityCharge / 12;
 		double val2 = 1 - 0;
@@ -367,12 +384,14 @@ public class BuilderNewLogic {
 		double val4 = 0;
 		double val5 = Math.max(inner1max2, 0);
 		double val6 = 0;
-		if (prop.moralityCharges) {
+		if (prop.moralityCharges ==true) {
 			val6 = 1;
 		}
 
 		double s = (val1 * val2 * val3 + val4 * val5)  * val6;
-		return Math.round(s);
+		String k =comm.getRoundOffLevel2(String.valueOf(s));
+		return Double.parseDouble(k);
+		
   	}
     
    
@@ -381,12 +400,7 @@ public class BuilderNewLogic {
 
     
     
-  /*  public double getOtherCharges4()
-    {  double output = getPremiumAllocCharge(getMoralityCharges4(), getDonotuse(), false)+getPolicyAdministrationCharge(getDonotuse())+
-    getPPWBCharges(getMoralityCharges4(), getDonotuse())+getAdbAtpdcharges(getDonotuse())+
-    	
-    }
-    */
+    
     
     //========================================total tax
     
@@ -394,13 +408,13 @@ public class BuilderNewLogic {
 		return 0.18;
 	}
 
-	public double getTotalCharges4(double year, double month) {
+	public double getTotalCharges4(double year, double month,boolean bancaDiss,double sumPrem) {
 		     double totalCharges =0;
 		if (year == 0) {
 			return  0;
 
 		} else {
-			totalCharges= getMortalityAndMorbidityCharges4(year, month, false, totalCharges)+getAdbAtpdcharges(year)+getPPWBCharges(month, year)+getDonotuse()+getPolicyAdministrationCharge(year);
+			totalCharges= getMortalityAndMorbidityCharges4(year, month, bancaDiss, sumPrem)+getAdbAtpdcharges(year)+getPPWBCharges(month, year)+getPolicyAdministrationCharge(year);
 		}
 		return totalCharges;
 	}
@@ -413,15 +427,15 @@ public class BuilderNewLogic {
 		try {
 			date1 = dateFormat.parse(bean.getProposalDate());
 			date2 = dateFormat.parse(prop.kfcDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
+			
 			e.printStackTrace();
 		}
 
 		double diff = comm.getMonthDiff(date2, date1) + 1;
 		return diff;
 	}
-    public double getTotalTaxSurr4(double year, double month)
+    public double getTotalTaxSurr4(double year, double month, boolean bancaDiss, double sumPrem)
     {
     	double res = 0;
     	double res2=0;
@@ -436,7 +450,7 @@ public class BuilderNewLogic {
     	
     	if(prop.Mortality_and_Rider_Charges== true)
     	{
-    		res2=getMortalityAndMorbidityCharges4(year, month, false, res)+0+ getAdbAtpdcharges(year)+getPPWBCharges(month, year);
+    		res2=getMortalityAndMorbidityCharges4(year, month, bancaDiss, sumPrem)+ getAdbAtpdcharges(year)+getPPWBCharges(month, year);
     	}
     	else
     		res2=0;
@@ -449,16 +463,19 @@ public class BuilderNewLogic {
     	else
     		res3 = prop.ServiceTax;
     	
-    	return (res+res2)* res3;
+    	double k =(res+res2)* res3  ;
+    	String l = comm.getRoundOffLevel2(String.valueOf(k));
+    	return Double.parseDouble(l);
     }
     
     
-    public double getTotalTax4(double month, double year, boolean bancdiss) {
+    public double getTotalTax4(double month, double year, boolean bancdiss,double sumPrem) {
     	
 
     	double res = 0;
     	double res2=0;
     	double res3=0;
+    	double AA = 9.41;
     	
     	if(prop.riderCharges==true)
     	{
@@ -473,30 +490,79 @@ public class BuilderNewLogic {
     		res2 = prop.ServiceTax;
     	
     	
-    	res3 = getTotalTaxSurr4(year, month)+getTaxOnAllocation_K(month, year, bancdiss);//pending tax fms=+===========================
-    	
-    	return  (res3+res)*res2;
+    	res3 = getTotalTaxSurr4(year, month, bancdiss, sumPrem)+getTaxOnAllocation_K(month, year, bancdiss)+AA;//pending tax fms=+===========================
+    	String l = comm.getRoundOffLevel2(String.valueOf(res3));
+    	return Double.parseDouble(l);
     }
-    
-    //================================================AA onword
-   	public double getGuranteeAddition4() {
-   		return 0;
+public double getAdditiontoFund4(double year,double month, boolean bancaDiss,double sumPrem) {
+	   	
+		double res = 0;
+		double use= 0;
+		
+		if (month == 1) {
+			use = 0;
+		} else {
+			use = getFundValueAtEnd4(year, month-1, bancaDiss, sumPrem);
+		}
+		
+		if(year ==0)
+		{
+			return 0;
+		}
+		
+		else 
+			res= (use+getAmtAvailForInvestment(month, year, bancaDiss)-getTotalCharges4(year, month, bancaDiss, sumPrem)-getTotalTaxSurr4(year, month, bancaDiss, sumPrem)) *0.00327373978219891;
+		
+		return comm.roundUP(res, 2);
    	}
-   	public double getTerminalAddition4()
+
+public double getfundBeforeFmc4(double year,double month,boolean bancaDiss,double sumPrem) {
+		double res = 0;
+		double AE=0;
+		if (month==1)
+		{
+			AE=0;
+		}
+		else
+		{
+			AE= getFundValueAtEnd4(year, month-1, bancaDiss, sumPrem);
+		}
+	
+if (year ==0 )
+{
+	res=0;
+}
+
+else {
+	res=AE+getAmtAvailForInvestment(month, year, bancaDiss)+getAdditiontoFund4(year, month, bancaDiss, sumPrem)-getTotalCharges4(year, month, bancaDiss, sumPrem)- getTotalTaxSurr4(year, month, bancaDiss, sumPrem);
+	}
+
+ 
+
+	
+	return res;
+}
+
+
+
+
+	public double getfundManagementCharge4(double year,double month, boolean bancaDiss,double sumPrem) {
+   		double res=0;
+   		if(year==0)
+   			return 0;
+   		else
+   			res =( getfundBeforeFmc4(year, month, bancaDiss,sumPrem) * 0.012525)/12;
+   		
+   		String  l = comm.getRoundOffLevel2(String.valueOf(res));
+   		return Double.parseDouble(l);
+   	}
+	
+	public double getGuarantedcharges4()
    	{
    		return 0;
    	}
-   	public double getFundValueAtEnd4(double year,double month, boolean bancaDiss) {
-   		return getGuranteeAddition4()+getTerminalAddition4()+getFundValueAfterFmc4(year, month, bancaDiss);
-   	}
-   	public double getFundValueAfterFmc4(double year,double month, boolean bancaDiss) {
-   		if(year ==0)
-   			return 0;
-   		else
-   			return getfundBeforeFmc4(year, month, bancaDiss)-getfundManagementCharge4(year, month, bancaDiss) - getGuarantedcharges4()-getTaxonFmc4(year, month, bancaDiss);
-   		 	}
    	
-   	public double getTaxonFmc4(double year, double month,boolean bancaDiss) {
+	public double getTaxonFmc4(double year, double month,boolean bancaDiss,double sumPrem) {
    		double a =0;
    		double b =0;
    		double c= 0;
@@ -505,8 +571,9 @@ public class BuilderNewLogic {
    		{
    			a =0;
    		}
+   	
    		else
-   			a=getfundManagementCharge4(year, month, bancaDiss)*0.12525/0.12525;
+   			a=getfundManagementCharge4(year, month, bancaDiss,sumPrem)*0.12525/0.12525;
    		
    		if(month<=0)
    			b = prop.totalTax;
@@ -519,72 +586,240 @@ public class BuilderNewLogic {
    			c =0;
    		 
    		res= a*b*c;
-   		return comm.roundUP(res, 2);
-   		
-   		
+   		String l = comm.getRoundOffLevel2(String.valueOf(res));
+   		return Double.parseDouble(l);
+   			}
+	
+	
+	public double getFundValueAfterFmc4(double year,double month, boolean bancaDiss,double sumPrem) {
+   		double res =0;
+   		if(year ==0)
+   			return 0;
+   		else {
+   			res =getfundBeforeFmc4(year, month, bancaDiss,sumPrem)-getfundManagementCharge4(year, month, bancaDiss,sumPrem) -getTaxonFmc4(year, month, bancaDiss,sumPrem);
+   		}
+   		String l = comm.getRoundOffLevel2(String.valueOf(res));
+   		return  Double.parseDouble(l);
+   		 	}
+	
+    //================================================AA onword
+   	public double getGuranteeAddition4() {
+   		return 0;
    	}
-   	
-   	public double getGuarantedcharges4()
+   	public double getTerminalAddition4()
    	{
    		return 0;
    	}
    	
-   	public double getfundBeforeFmc4(double year,double month,boolean bancaDiss) {
-   		double res = 0;
-		if (month == 1) {
-			res = 0;
-		} else {
-			res = getFundValueAtEnd4(year, month, bancaDiss);
-			
-			return comm.roundUP(res, 2);
-		}
-   			
-		
-		if(year==0)
-			return 0;
-		else
-			return res+getAmtAvailForInvestment(month, year, bancaDiss)+getAdditiontoFund4(year, month, bancaDiss)-getTotalCharges4(year, month)- getTotalTaxSurr4(year, month);
-   	}
-   	
-   	
-   	public double getfundManagementCharge4(double year,double month, boolean bancaDiss) {
-   		double res=0;
-   		if(year==0)
-   			return 0;
-   		else
-   			res = getfundBeforeFmc4(year, month, bancaDiss) * 0.12525/12;
+   	public double getFundValueAtEnd4(double year,double month, boolean bancaDiss,double sumPrem) {
    		
-   		return comm.roundUP(res, 2);
-   	}
+   		return getFundValueAfterFmc4(year, month, bancaDiss, sumPrem);
+         	}
+	public double getFundValueAtEndd4(double year,double month, boolean bancaDiss,double sumPrem) {
+   		
+   		return getFundValueAfterFmc4(year, month, bancaDiss, sumPrem);
+         	}
    	
-   	public double getAdditiontoFund4(double year,double month, boolean bancaDiss) {
    	
-		double res = 0;
-		double use= 0;
-		
-		if (month == 1) {
-			use = 0;
-		} else {
-			use = getFundValueAtEnd4(year, month, bancaDiss);
-		}
-		
-		if(year ==0)
-		{
-			return 0;
-		}
-		
-		else 
-			res= (use+getAmtAvailForInvestment(month, year, bancaDiss)-getTotalCharges4(year, month)-getTotalTaxSurr4(year, month)) *0.00327;
-		
-		return comm.roundUP(res, 2);
-   	}
+   
+   	
+   
+   	
+	
+	
+   
+   
+   	
+   	
+  
+   	
+   
    	
    	//========================================complete  upto AE===============================================
    	
+   	//=============================for sureender charges percentage
+   	public double getSurrenderChargePer(double year) {  
+		double rate = 0;
+		
+		if (bean.getPlanType().equalsIgnoreCase("Single")) {
+			if (bean.getBasePremium() > 25000) {
+				if (year == 1) {
+					rate = 0.02;
+				} else if (year == 2) {
+					rate = 0.015;
+				} else if (year == 3) {
+					rate = 0.01;
+				} else if (year == 4) {
+					rate = 0.005;
+				} else {
+					rate = 0;
+				}
+			} else {
+				rate = 0;
+			}
+		} else
+
+		{
+			
+
+				if (bean.getBasePremium() > 50000) {
+
+					if (year == 1) {
+						rate = 0.06;
+					} else if (year == 2) {
+						rate = 0.04;
+					} else if (year == 3) {
+						rate = 0.03;
+					} else if (year == 4) {
+						rate = 0.02;
+					} else {
+						rate = 0;
+					}
+				} else {
+					if (year == 1) {
+						rate = 0.2;
+					} else if (year == 2) {
+						rate = 0.15;
+					} else if (year == 3) {
+						rate = 0.1;
+					} else if (year == 4) {
+						rate = 0.05;
+					} else {
+						rate = 0;
+					}		}
+			
+		}
+
+		return rate;
+	}
    	
-     
-   
+   	
+   	public double getSurrenderChargesCap(double year,double month) {  
+		double rate = 0;
+		
+		if (bean.getPlanType().equalsIgnoreCase("Single")) {
+			if (bean.getBasePremium() > 25000) {
+				if (year == 1) {
+					rate = 3000;
+				} else if (year == 2) {
+					rate = 2000;
+				} else if (year == 3) {
+					rate = 1500;
+				} else if (year == 4) {
+					rate = 1000;
+				} else {
+					rate = 0;
+				}
+			} else {
+				rate = 0;
+			}
+		} else
+
+		{
+			
+
+				if (bean.getBasePremium() > 50000) {
+
+					if (year == 1) {
+						rate = 6000;
+					} else if (year == 2) {
+						rate = 5000;
+					} else if (year == 3) {
+						rate = 4000;
+					} else if (year == 4) {
+						rate = 1000;
+					} else {
+						rate = 0;
+					}
+				} else {
+					if (year == 1) {
+						rate = 3000;
+					} else if (year == 2) {
+						rate = 2000;
+					} else if (year == 3) {
+						rate = 1500;
+					} else if (year == 4) {
+						rate = 1000;
+					} else {
+						rate = 0;
+					}
+				}
+			
+		}
+
+		return rate;
+	}
+
     
+   	
+
+     
+     public double getSurrenderCharges4(double year,double month)
+     {
+    	 double res= 0;
+    	 double res1 =0;
+    	 double output =0;
+    	 res = bean.getBasePremium();
+    	 res1= res*getSurrenderChargePer(year);
+    	
+    	 output=Math.min(res1, getSurrenderChargesCap(year,month));
+    	 return comm.roundUP(output, 2);	 
+    	 
+     }
+    
+     ///////////tax on surrender charges/////////////////////////////////////////
+     public double getTaxSurrenderCharges4(double year,double month, boolean bancaDiss,double sumPrem)
+     
+     {  double res =0;
+    	 if(prop.surrender_charge == true)
+    	 {
+    		 res = getSurrenderCharges4(year, month)*0.18;
+    		 
+    	 }
+    	 return comm.roundUP(res, 2);
+    	 
+     }
+     
+     public double getSurrenderValue4(double year,double month, boolean bancaDiss,double sumPrem)
+     {
+    	 double res= 0;
+    	 double a =0;
+    	 if(bean.getPlanType().equalsIgnoreCase("Retire Smart Plus"))
+    		 a=getTerminalAddition4();
+    	 else
+    		 a=0;
+    	 
+    	 res = getFundValueAtEnd4(year, month, bancaDiss,sumPrem)-getSurrenderCharges4(year, month) -getTaxSurrenderCharges4(year, month, bancaDiss,sumPrem)-a;
+    	 
+    	 return res;
+    	 
+     }
+     public double getDeathBenifit_AI(double year,double month, boolean bancaDiss,double sumPrem) {
+ 		
+ 		double output = 0;
+ 		
+ 		double AE = getFundValueAtEnd4(year, month, bancaDiss,sumPrem);
+ 		double max1val1 = (AE + 0);
+ 		double max1val2 = SumAssured() * 1 ;
+ 		double max1val3 = sumPrem * 1.05;
+
+ 		double val1val2 = Math.max(max1val1, max1val2);
+
+ 		double max1 = Math.max(val1val2, max1val3);
+
+ 		// ---------------
+
+ 		double max2val1 = AE + (SumAssured() * 1);
+ 		double max2val2 = sumPrem * 1.05;
+ 		double max2 = Math.max(max2val1, max2val2);
+
+ 		double val2 = 0 * max2;
+ 		output = max1 + val2;
+ 		return output;
+ 	}
+     
+     
+     
     
     
    

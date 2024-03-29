@@ -1,16 +1,22 @@
 package com.sbilife.BuilderNew;
 
+import com.sbilife.builder.Builder;
 import com.sbilife.common.CommonForAllProd;
+import com.sbilife.saralaPensionNextt.nextBusinessLogic;
 
 public class test {
 	
+	
 public static void main(String[] args) {
-	double a= 52.25;
-	double v= 0.18;
-	double res = a*v;
-	CommonForAllProd comm = new CommonForAllProd();
+BuilderNewJavaSecond res = new BuilderNewJavaSecond();
+String output =res.calculatePrem("29", "12", "30", "male", "female", "yearly", "regular", "31/07/2021", "50000", "true");
+System.out.println(output);
+}
+	
+	
 
-System.out.println(comm.roundUP(res, 2));
+	
+	
 
 }
 		
@@ -18,4 +24,3 @@ System.out.println(comm.roundUP(res, 2));
 		
 	
 
-}

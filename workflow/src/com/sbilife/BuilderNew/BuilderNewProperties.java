@@ -10,7 +10,7 @@ public class BuilderNewProperties {
 		Mortality_Charge=1.2,
 		int1 = 0.04,
 		int2 = 0.08,
-		weightedFMC = 0.0125,
+		weightedFMC = 0.012525,
 		guaranteedCharge = 0.0;
 	 double samfMin_regular_PPT = 10;
 	 double samfMax_regular_PPT = 10;

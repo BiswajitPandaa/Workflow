@@ -1,10 +1,10 @@
 package com.sbilife.BuilderNew;
 
 public class BuilderNewBean {
-	private int age, policyTerm,ageOfProposer,premiumPayingTerm;
+	int age, policyTerm,ageOfProposer;
 	private String genderOfLifeInsured,genderOfProposer,premiumPaymentMode,planType,proposalDate;
 	private double basePremium;
-	boolean staffDis;
+	boolean stafDisc;
 	public int getAge() {
 		return age;
 	}
@@ -59,18 +59,23 @@ public class BuilderNewBean {
 	public void setBasePremium(double basePremium) {
 		this.basePremium = basePremium;
 	}
-	public boolean isStaffDis() {
-		return staffDis;
+	public boolean isStafDisc() {
+		return stafDisc;
 	}
-	public void setStaffDis(boolean staffDis) {
-		this.staffDis = staffDis;
-	}
-	public int getPremiumPayingTerm() {
-		return premiumPayingTerm;
-	}
-	public void setPremiumPayingTerm(int premiumPayingTerm) {
-		this.premiumPayingTerm = premiumPayingTerm;
+	public void setStafDisc(boolean stafDisc) {
+		this.stafDisc = stafDisc;
 	}
 	
+	
+	
+	
+	/*BuilderNewBean(int policyTerm,String planType,double basePremium )
+	{
+		this.policyTerm= policyTerm;
+		this.planType = planType;
+		this.basePremium=basePremium;
+		
+		
+	}*/
 
 }
